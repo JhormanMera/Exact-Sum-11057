@@ -3,7 +3,7 @@ import java.io.*;import java.util.*;
 public class Main {
 
     private static final String FILE_SEPARATOR = "\\ ";
-    private static ArrayList<Integer> money = new ArrayList<>();
+    private static ArrayList<Integer> cash = new ArrayList<>();
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -15,59 +15,59 @@ public class Main {
 
     public static void Initialize(BufferedReader br, BufferedWriter bw) throws IOException {
 
-        ArrayList<int[]> cases = new ArrayList<>();
+        ArrayList<int[]> instance = new ArrayList<>();
         String size = br.readLine();
 
         while (size != null) {
             int extent = Integer.parseInt(size);
-            int[] arrayInt = new int[extent];
-            String secondLine = br.readLine();
-            String[] parts = secondLine.split(FILE_SEPARATOR);
+            int[] array = new int[extent];
+            String line = br.readLine();
+            String[] parts = line.split(FILE_SEPARATOR);
             for (int i = 0; i < extent; i++) {
-                arrayInt[i] = Integer.parseInt(parts[i]);
+                array[i] = Integer.parseInt(parts[i]);
             }
-            Arrays.sort(arrayInt);
-            cases.add(arrayInt);
+            Arrays.sort(array);
+            instance.add(array);
 
-            money.add(Integer.parseInt(br.readLine()));
+            cash.add(Integer.parseInt(br.readLine()));
             br.readLine();      
             size = br.readLine();
         }
 
-        for (int i = 0; i < cases.size(); i++) {
-            bw.write(getInfo(cases.get(i), money.get(i)));
+        for (int i = 0; i < instance.size(); i++) {
+            bw.write(getInfo(instance.get(i), cash.get(i)));
             bw.flush();
         }
 
     }
 
-    public static String getInfo(int[] ai, int result) {
-        int bestPrice1 = 0;
-        int bestPrice2 = 10000000;
-        for (int i = 0; i < ai.length; i++) {
-            int priceBook1 = ai[i];
-            int priceBook2 = binarySearch(i + 1, (ai.length - 1), (result - priceBook1), ai);
-            if (priceBook2 > -1) {
-                if ((priceBook2 - priceBook1) < (bestPrice2 - bestPrice1)) {
-                    bestPrice1 = priceBook1;
-                    bestPrice2 = priceBook2;
+    public static String getInfo(int[] array, int output) {
+        int book1 = 0;
+        int book2 = 10000000;
+        for (int i = 0; i < array.length; i++) {
+            int price1 = array[i];
+            int price2 = binarySearch(i + 1, (array.length - 1), (output - price1), array);
+            if (price2 > -1) {
+                if ((price2 - price1) < (book2 - book1)) {
+                    book1 = price1;
+                    book2 = price2;
                 }
             }
         }
-        return "Peter should buy books whose prices are " + bestPrice1 + " and " + bestPrice2 + "."+ "\n\n";
+        return "Peter should buy books whose prices are " + book1 + " and " + book2 + "."+ "\n\n";
     }
 
-    public static int binarySearch(int posMin, int posMax, int lackMoney, int[] ai) {
-        if (posMin > posMax) {
+    public static int binarySearch(int min, int max, int gap, int[] array) {
+        if (min > max) {
             return -1;
         }
-        int m = (posMin + posMax) / 2;
-        if (ai[m] > lackMoney) {
-            return binarySearch(posMin, m - 1, lackMoney, ai);
-        } else if (ai[m] < lackMoney) {
-            return binarySearch(m + 1, posMax, lackMoney, ai);
+        int m = (min + max) / 2;
+        if (array[m] > gap) {
+            return binarySearch(min, m - 1, gap, array);
+        } else if (array[m] < gap) {
+            return binarySearch(m + 1, max, gap, array);
         } else {
-            return lackMoney;
+            return gap;
         }
     }
 }
